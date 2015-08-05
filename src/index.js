@@ -46,13 +46,12 @@ function whitespaceCheck(str, paramName) {
  * @param {Boolean} [opts.type] - should parameter types be returned (used only for TypeScript)
  * @returns {Array} - list of params
  */
-export default function funcGetParams(contents, functionName, opts) {
+export default function funcGetParams(contents, functionName, opts = {}) {
   let matches, regex;
 
-  if (opts && opts.language && opts.language !== 'js' && opts.language !== 'coffee' && opts.language !== 'ts') {
+  if (opts.language && opts.language !== 'js' && opts.language !== 'coffee' && opts.language !== 'ts') {
     throw new Error(`Expected opts.language to be 'js', 'coffee', or 'ts'`);
   }
-  opts = opts || {};
 
   stringCheck(contents, 'contents');
   emptyStringCheck(contents, 'contents');
