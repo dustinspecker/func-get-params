@@ -80,9 +80,7 @@ export default function funcGetParams(contents, functionName, opts = {}) {
     return [];
   }
 
-  return matches[1].split(',').filter((param) => {
-    return param !== '';
-  }).map((param) => {
+  return matches[1].split(',').filter(param => param !== '').map(param => {
     const typeLocation = param.indexOf(':');
 
     let type = null;
