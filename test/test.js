@@ -77,22 +77,22 @@ describe('func-get-params', () => {
 
   describe('JavaScript', () => {
     it('should return 0 params', () => {
-      const fileContents = 'function config() {}';
+      let fileContents = 'function config() {}';
       expect(funcGetParams(fileContents, 'config')).to.eql([]);
     });
 
     it('should return 1 param', () => {
-      const fileContents = 'function config(x) {}';
+      let fileContents = 'function config(x) {}';
       expect(funcGetParams(fileContents, 'config')).to.eql(['x']);
     });
 
     it('should return 2 params', () => {
-      const fileContents = 'function config(x, y) {}';
+      let fileContents = 'function config(x, y) {}';
       expect(funcGetParams(fileContents, 'config')).to.eql(['x', 'y']);
     });
 
     it('should find params from custom regex', () => {
-      const fileContents = 'var config = function (x, y) {}'
+      let fileContents = 'var config = function (x, y) {}'
         , regex = 'var config = function \\(([\\s\\S]*?)\\) {}';
 
       expect(funcGetParams(fileContents, 'config', {regex})).to.eql(['x', 'y']);
@@ -101,39 +101,39 @@ describe('func-get-params', () => {
 
   describe('CoffeeScript', () => {
     it('should return 0 params from missing () function', () => {
-      const fileContents = 'config = ->';
+      let fileContents = 'config = ->';
       expect(funcGetParams(fileContents, 'config', {language: 'coffee'})).to.eql([]);
     });
 
     it('should return 0 params from empty () function', () => {
-      const fileContents = 'config = () ->';
+      let fileContents = 'config = () ->';
       expect(funcGetParams(fileContents, 'config', {language: 'coffee'})).to.eql([]);
     });
 
     it('should return 1 param', () => {
-      const fileContents = 'config = (x) ->';
+      let fileContents = 'config = (x) ->';
       expect(funcGetParams(fileContents, 'config', {language: 'coffee'})).to.eql(['x']);
     });
 
     it('should return 1 param', () => {
-      const fileContents = 'config = (x, y) ->';
+      let fileContents = 'config = (x, y) ->';
       expect(funcGetParams(fileContents, 'config', {language: 'coffee'})).to.eql(['x', 'y']);
     });
   });
 
   describe('TypeScipt', () => {
     it('should return 0 params', () => {
-      const fileContents = 'function config() {}';
+      let fileContents = 'function config() {}';
       expect(funcGetParams(fileContents, 'config', {language: 'ts'})).to.eql([]);
     });
 
     it('should return 1 param', () => {
-      const fileContents = 'function config(x) {}';
+      let fileContents = 'function config(x) {}';
       expect(funcGetParams(fileContents, 'config', {language: 'ts'})).to.eql(['x']);
     });
 
     it('should return 1 param with type', () => {
-      const fileContents = 'function config(x: int) {}';
+      let fileContents = 'function config(x: int) {}';
       expect(funcGetParams(fileContents, 'config', {language: 'ts', type: true})).to.eql([{param: 'x', type: 'int'}]);
     });
   });
