@@ -46,7 +46,7 @@ function whitespaceCheck(str, paramName) {
  * @param {Boolean} [opts.type] - should parameter types be returned (used only for TypeScript)
  * @returns {Array} - list of params
  */
-export default function funcGetParams(contents, functionName, opts = {}) {
+module.exports = function (contents, functionName, opts = {}) {
   let matches, regex;
 
   if (opts.language && opts.language !== 'js' && opts.language !== 'coffee' && opts.language !== 'ts') {
@@ -109,4 +109,4 @@ export default function funcGetParams(contents, functionName, opts = {}) {
 
     return param;
   });
-}
+};
