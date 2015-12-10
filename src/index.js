@@ -83,30 +83,31 @@ module.exports = function (contents, functionName, opts = {}) {
   return matches[1].split(',').filter(param => param !== '').map(param => {
     const typeLocation = param.indexOf(':');
 
-    let type = null;
+    let formattedParam = param
+      , type = null;
 
     if (opts.language !== 'ts') {
-      return param.trim();
+      return formattedParam.trim();
     }
 
     if (opts.type && typeLocation !== -1) {
-      type = param.substring(typeLocation + 1, param.length);
+      type = formattedParam.substring(typeLocation + 1, formattedParam.length);
       type = type.trim();
     }
 
     if (typeLocation !== -1) {
-      param = param.substring(0, typeLocation);
+      formattedParam = formattedParam.substring(0, typeLocation);
     }
 
-    param = param.trim();
+    formattedParam = formattedParam.trim();
 
     if (opts.type) {
       return {
-        param,
+        param: formattedParam,
         type
       };
     }
 
-    return param;
+    return formattedParam;
   });
 };
