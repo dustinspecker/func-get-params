@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Check for string type
@@ -6,9 +6,9 @@
  * @param {String} paramName - parameter name being checked
  * @throws {TypeError} - if o is not a string
  */
-function stringCheck(o, paramName) {
+const stringCheck = (o, paramName) => {
   if (typeof o !== 'string') {
-    throw new TypeError(`Expected ${paramName} to be a string`);
+    throw new TypeError(`Expected ${paramName} to be a string`)
   }
 }
 
@@ -18,9 +18,9 @@ function stringCheck(o, paramName) {
  * @param {String} paramName - parameter name being checked
  * @throws {Error} - if str is an empty string
  */
-function emptyStringCheck(str, paramName) {
+const emptyStringCheck = (str, paramName) => {
   if (str.length === 0) {
-    throw new Error(`Expected ${paramName} to be non-empty string`);
+    throw new Error(`Expected ${paramName} to be non-empty string`)
   }
 }
 
@@ -30,9 +30,9 @@ function emptyStringCheck(str, paramName) {
  * @param {String} paramName - parameter name being checked
  * @throws {Error} - if str contains whitespace
  */
-function whitespaceCheck(str, paramName) {
+const whitespaceCheck = (str, paramName) => {
   if (str.match(/\s/g)) {
-    throw new Error(`Expected ${paramName} to not contain whitespace`);
+    throw new Error(`Expected ${paramName} to not contain whitespace`)
   }
 }
 
@@ -47,67 +47,67 @@ function whitespaceCheck(str, paramName) {
  * @returns {Array} - list of params
  */
 module.exports = function (contents, functionName, opts = {}) {
-  let matches, regex;
+  let regex
 
   if (opts.language && opts.language !== 'js' && opts.language !== 'coffee' && opts.language !== 'ts') {
-    throw new Error(`Expected opts.language to be 'js', 'coffee', or 'ts'`);
+    throw new Error('Expected opts.language to be \'js\', \'coffee\', or \'ts\'')
   }
 
-  stringCheck(contents, 'contents');
-  emptyStringCheck(contents, 'contents');
+  stringCheck(contents, 'contents')
+  emptyStringCheck(contents, 'contents')
 
-  stringCheck(functionName, 'functionName');
-  emptyStringCheck(functionName, 'functionName');
-  whitespaceCheck(functionName, 'functionName');
+  stringCheck(functionName, 'functionName')
+  emptyStringCheck(functionName, 'functionName')
+  whitespaceCheck(functionName, 'functionName')
 
   if (contents.indexOf(functionName) === -1) {
-    throw new Error(`Expected function ${functionName} to be in fileContents`);
+    throw new Error(`Expected function ${functionName} to be in fileContents`)
   }
 
   if (!opts.regex) {
     if (opts.language === 'coffee') {
-      regex = new RegExp(`${functionName}[\\s]*=[\\s]*\\(([\\s\\S]*?)\\)`);
+      regex = new RegExp(`${functionName}[\\s]*=[\\s]*\\(([\\s\\S]*?)\\)`)
     } else {
-      regex = new RegExp(`function ${functionName}[\\s]*\\(([\\s\\S]*?)\\)`);
+      regex = new RegExp(`function ${functionName}[\\s]*\\(([\\s\\S]*?)\\)`)
     }
   } else {
-    regex = new RegExp(opts.regex);
+    regex = new RegExp(opts.regex)
   }
 
-  matches = regex.exec(contents);
+  const matches = regex.exec(contents)
 
   if (!matches) {
-    return [];
+    return []
   }
 
   return matches[1].split(',').filter(param => param !== '').map(param => {
-    const typeLocation = param.indexOf(':');
+    const typeLocation = param.indexOf(':')
 
     let formattedParam = param
-      , type = null;
+      , type = null
 
     if (opts.language !== 'ts') {
-      return formattedParam.trim();
+      return formattedParam.trim()
     }
 
     if (opts.type && typeLocation !== -1) {
-      type = formattedParam.substring(typeLocation + 1, formattedParam.length);
-      type = type.trim();
+      type = formattedParam.substring(typeLocation + 1, formattedParam.length)
+      type = type.trim()
     }
 
     if (typeLocation !== -1) {
-      formattedParam = formattedParam.substring(0, typeLocation);
+      formattedParam = formattedParam.substring(0, typeLocation)
     }
 
-    formattedParam = formattedParam.trim();
+    formattedParam = formattedParam.trim()
 
     if (opts.type) {
       return {
         param: formattedParam,
         type
-      };
+      }
     }
 
-    return formattedParam;
-  });
-};
+    return formattedParam
+  })
+}
