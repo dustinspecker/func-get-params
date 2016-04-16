@@ -80,34 +80,36 @@ module.exports = function (contents, functionName, opts = {}) {
     return []
   }
 
-  return matches[1].split(',').filter(param => param !== '').map(param => {
-    const typeLocation = param.indexOf(':')
+  return matches[1].split(',')
+    .filter(param => param !== '')
+    .map(param => {
+      const typeLocation = param.indexOf(':')
 
-    let formattedParam = param
-      , type = null
+      let formattedParam = param
+        , type = null
 
-    if (opts.language !== 'ts') {
-      return formattedParam.trim()
-    }
-
-    if (opts.type && typeLocation !== -1) {
-      type = formattedParam.substring(typeLocation + 1, formattedParam.length)
-      type = type.trim()
-    }
-
-    if (typeLocation !== -1) {
-      formattedParam = formattedParam.substring(0, typeLocation)
-    }
-
-    formattedParam = formattedParam.trim()
-
-    if (opts.type) {
-      return {
-        param: formattedParam,
-        type
+      if (opts.language !== 'ts') {
+        return formattedParam.trim()
       }
-    }
 
-    return formattedParam
-  })
+      if (opts.type && typeLocation !== -1) {
+        type = formattedParam.substring(typeLocation + 1, formattedParam.length)
+        type = type.trim()
+      }
+
+      if (typeLocation !== -1) {
+        formattedParam = formattedParam.substring(0, typeLocation)
+      }
+
+      formattedParam = formattedParam.trim()
+
+      if (opts.type) {
+        return {
+          param: formattedParam,
+          type
+        }
+      }
+
+      return formattedParam
+    })
 }
